@@ -1,0 +1,15 @@
+Usage:
+
+    self:init
+        Initializes the current directory with an ash_modules file
+
+    self:install [$git_url] [--global]
+        Installs the modules defined in the ash_modules file.
+
+        If `$git_url` is passed, only that ash module will be
+        downloaded.
+
+        The `--global` flag may only be passed if `$git_url` is
+        also passed.  Adding the `--global` flag will install
+        the single module globally, which will allow access to
+        the module from any directory.

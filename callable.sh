@@ -17,7 +17,7 @@ Self__callable_main() {
 # this module
 ##################################################
 Self__callable_help() {
-    Logger__warning "TODO: self:help"
+    more "$Ash__active_module_directory/HELP.txt"
 }
 
 ##################################################
