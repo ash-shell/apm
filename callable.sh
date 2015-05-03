@@ -25,15 +25,15 @@ Self__callable_help() {
 # directory so it can start installing modules
 ##################################################
 Self__callable_init() {
-    # Checking if directory is already initialized
-    if [[ -e "$Self_modules_file_path" ]]; then
-        Logger__error "Directory is already initialized"
-        return
-    fi
+    # Hasn't been created
+    if [[ ! -f "$Self_modules_file_path" ]]; then
+        touch "$Self_modules_file_path"
+        Logger__success "Directory successfully initialized"
 
-    # Creating our file
-    touch "$Self_modules_file_path"
-    Logger__success "Directory successfully initialized"
+    # Has already been created
+    else
+        Logger__error "Directory is already initialized"
+    fi
 }
 
 ##################################################
@@ -48,6 +48,11 @@ Self__callable_init() {
 # @param $2: `--global` to install globally
 ##################################################
 Self__callable_install() {
+    # Creating modules directory
+    if [[ ! -d "$Self_modules_directory_path" ]]; then
+        mkdir "$Self_modules_directory_path"
+    fi
+
     # Importing install helper
     . "$Ash__active_module_directory/helper/install.sh"
 

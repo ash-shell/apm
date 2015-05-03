@@ -7,7 +7,11 @@ Self_install_path="" # TBD at runtime
 # from the ash_modules file locally
 ##################################################
 Self_install_modules_file() {
-    Logger__log "Install Modules"
+    while read line; do
+        if [[ "$line" != "" ]]; then
+            Self_install_url "$line"
+        fi
+    done < "$Self_modules_file_path"
 }
 
 ##################################################
