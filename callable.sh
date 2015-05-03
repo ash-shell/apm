@@ -82,10 +82,33 @@ Self_install_url() {
 
     # Success
     if [[ $success -eq 0 ]]; then
-        echo "Success!!!"
+        Self_validate_install "$1"
+
+    # Failure
     else
-        echo "Failure!!!"
+        Logger__error "Failed to clone $1"
     fi
+}
+
+##################################################
+# Validates an install
+##################################################
+Self_validate_install() {
+    local repo_folder=""
+
+    # SSH
+    local ssh_regex="git@.*\:.*/(.*).git"
+    if [[ "$1" =~ "$ssh_regex" ]]; then
+        repo_folder=${BASH_REMATCH[1]}
+    fi
+
+    # HTTP(S)
+    local http_regex="https?\://.*/.*/(.*).git"
+    if [[ "$1" =~ $http_regex ]]; then
+        repo_folder="${BASH_REMATCH[1]}"
+    fi
+
+    echo $repo_folder
 }
 
 ##################################################
