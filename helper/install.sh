@@ -66,7 +66,7 @@ Self_install_validate() {
     fi
 
     # Importing slugify
-    Ash_import "slugify"
+    Ash__import "slugify"
 
     # Renaming git module to proper place
     eval $(YamlParse__parse "$repo_config" "Self_install_validate_")
