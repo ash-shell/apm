@@ -1,8 +1,8 @@
 #!/bin/bash
 
-Self_modules_file_name="ash_modules"
+Self_modules_file_name="Ashmodules"
 Self_modules_file_path="$Ash__call_directory/$Self_modules_file_name"
-Self_modules_directory_name=".ash_modules"
+Self_modules_directory_name="$Ash__modules_foldername"
 Self_modules_directory_path="$Ash__call_directory/$Self_modules_directory_name"
 
 ##################################################
