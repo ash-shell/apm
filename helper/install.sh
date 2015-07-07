@@ -24,15 +24,23 @@ Self_install_url() {
     # If global flag is passed
     if [[ -n "$2" && "$2" == "--global" ]]; then
         Self_install_path="$Ash__source_directory/$Ash_global_modules_directory"
+        Self_clone_path="$Ash__source_directory/$Self_modules_clone_directory"
 
     # If no global flag is passed
     else
-        Self_install_path="$Self_modules_directory_path"
+        Self_install_path="$Self_local_modules_directory_path"
+        Self_clone_path="$Self_local_modules_clone_path"
     fi
+
+    # Creating temporary clone path
+    if [[ -d "$Self_clone_path" ]]; then
+        rm -rf "$Self_clone_path"
+    fi
+    mkdir "$Self_clone_path"
 
     # Cloning
     Logger__log "Installing $1"
-    local success=$(cd $Self_install_path; git clone "$1" &> /dev/null; echo $?)
+    local success=$(cd $Self_clone_path; git clone "$1" &> /dev/null; echo $?)
 
     # Success
     if [[ $success -eq 0 ]]; then
@@ -42,6 +50,11 @@ Self_install_url() {
     else
         Logger__error "Failed to clone $1"
     fi
+
+    # Removing temporary clone path
+    if [[ -d "$Self_clone_path" ]]; then
+        rm -rf "$Self_clone_path"
+    fi
 }
 
 ##################################################
@@ -49,7 +62,7 @@ Self_install_url() {
 ##################################################
 Self_install_validate() {
     local repo_folder=$(Self_install_get_folder "$1")
-    local repo_path="$Self_install_path/$repo_folder"
+    local repo_path="$Self_clone_path/$repo_folder"
     local repo_config="$repo_path/$Ash_config_filename"
 
     # Invalid path

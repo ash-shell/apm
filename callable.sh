@@ -1,9 +1,10 @@
 #!/bin/bash
 
 Self_modules_file_name="Ashmodules"
+Self_modules_clone_directory=".ash_modules_tmp"
 Self_modules_file_path="$Ash__call_directory/$Self_modules_file_name"
-Self_modules_directory_name="$Ash__modules_foldername"
-Self_modules_directory_path="$Ash__call_directory/$Self_modules_directory_name"
+Self_local_modules_directory_path="$Ash__call_directory/$Ash__modules_foldername"
+Self_local_modules_clone_path="$Ash__call_directory/$Self_modules_clone_directory"
 
 ##################################################
 # This function is an alias for `ash self:help`.
@@ -49,8 +50,8 @@ Self__callable_init() {
 ##################################################
 Self__callable_install() {
     # Creating modules directory
-    if [[ ! -d "$Self_modules_directory_path" ]]; then
-        mkdir "$Self_modules_directory_path"
+    if [[ ! -d "$Self_local_modules_directory_path" ]]; then
+        mkdir "$Self_local_modules_directory_path"
     fi
 
     # Importing install helper
