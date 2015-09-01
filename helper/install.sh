@@ -83,7 +83,7 @@ Self_install_validate() {
 
     # Renaming git module to proper place
     eval $(YamlParse__parse "$repo_config" "Self_install_validate_")
-    local folder_name="$(Slugify__slugify "$Self_install_validate_name")"
+    local folder_name="$(Slugify__slugify "$Self_install_validate_callable_prefix")"
     local new_path="$Self_install_path/$folder_name"
     if [[ -d $new_path ]]; then
         Logger__error "Module '$Self_install_validate_name' is already installed"
