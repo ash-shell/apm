@@ -39,7 +39,7 @@ Self__callable_init() {
 
 ##################################################
 # This function will install all of the modules
-# from the ash_modules file when passed no
+# from the Ashmodules file when passed no
 # parameters.
 #
 # When this function is passed a parameter ($1),
@@ -50,7 +50,7 @@ Self__callable_init() {
 ##################################################
 Self__callable_install() {
     # Creating modules directory
-    if [[ ! -d "$Self_local_modules_directory_path" ]]; then
+    if [[ "$2" != "--global" && ! -d "$Self_local_modules_directory_path" ]]; then
         mkdir "$Self_local_modules_directory_path"
     fi
 
