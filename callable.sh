@@ -71,21 +71,9 @@ Self__callable_install() {
 # This function will update a global module or
 # Ash itself.
 #
-# If you would like to update a local module, you
-# can simply navigate into the Ashmodules
-# directory and update them via git commands.
-#
 # @param $1: The global module's `name` as defined
 #   in it's ash_config.yaml file.  To update Ash
 #   itself, simply just pass `ash` here.
-#
-# Example Usage:
-#
-#   Update Ash + it's core:
-#       ash self:update ash
-#
-#   Update a module named make:
-#       ash self:update make
 ##################################################
 Self__callable_update(){
     # Checking if we're passing a module name

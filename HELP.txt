@@ -16,3 +16,10 @@ Usage:
 
     self:update $module_name
         Updates a global module or Ash if $module_name is 'ash'.
+
+        `$module_name` should be the name as defined in it's
+        ash_config.yaml file.
+
+        If you would like to update a local module, you can simply
+        navigate into the Ashmodules directory and update them via
+        git commands.
