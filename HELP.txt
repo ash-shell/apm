@@ -23,3 +23,7 @@ Usage:
         If you would like to update a local module, you can simply
         navigate into the Ashmodules directory and update them via
         git commands.
+
+    self:modules
+        Displays a list of all of the global modules that are
+        currently installed.

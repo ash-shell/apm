@@ -68,6 +68,16 @@ Self__callable_install() {
 }
 
 ##################################################
+# This function will display a list of all of the
+# global modules that are currently installed.
+##################################################
+Self__callable_modules() {
+    for directory in $Ash__source_directory/$Ash_global_modules_directory/*; do
+        echo $(basename "$directory")
+    done
+}
+
+##################################################
 # This function will update a global module or
 # Ash itself.
 #
