@@ -39,6 +39,20 @@ This will create an `ash_modules` folder where the modules will be installed int
 
 After the modules are installed, you are free to start using them in that directory.
 
+#### self:update
+
+To update a global module, run:
+
+```sh
+ash self:update global-module-name
+```
+
+To update ash itself, run:
+
+```sh
+ash self:update ash
+```
+
 ## License
 
 [MIT](LICENSE.md)
