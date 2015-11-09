@@ -66,3 +66,58 @@ Self__callable_install() {
         Self_install_modules_file
     fi
 }
+
+##################################################
+# This function will update a global module or
+# Ash itself.
+#
+# @param $1: The global module's `name` as defined
+#   in it's ash_config.yaml file.  To update Ash
+#   itself, simply just pass `ash` here.
+##################################################
+Self__callable_update(){
+    # Checking if we're passing a module name
+    if [[ -z $1 ]]; then
+        Logger__error "Requires a valid module name (or \"ash\") to be passed in"
+        return
+    fi
+
+    # Checking if we're updating ash
+    if [[ $1 = 'ash' ]]; then
+        cd $Ash__source_directory
+
+        # Updating
+        git pull origin master
+        git submodule update
+
+        # Checking for success
+        if [ $? -eq 0 ]; then
+            Logger__success "Ash was updated"
+        else
+            Logger__error "Something went wrong, Ash was not updated"
+            Logger__error "You will have to manually update at $Ash__source_directory"
+        fi
+
+        return
+    fi
+
+    # Checking if we're passing a valid global module
+    local directory="$Ash__source_directory/$Ash_global_modules_directory/$1"
+    if [[ -d "$directory" ]]; then
+        Logger__log "Updating $1"
+
+        # Updating
+        cd "$directory"
+        git pull origin master
+
+        # Checking for success
+        if [ $? -eq 0 ]; then
+            Logger__success "$1 was updated"
+        else
+            Logger__error "Something went wrong, $1 was not updated"
+            Logger__error "You will have to manually update at $directory"
+        fi
+    else
+        Logger__error "Module \"$1\" does not exist"
+    fi
+}
