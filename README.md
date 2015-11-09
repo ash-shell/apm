@@ -53,6 +53,10 @@ To update ash itself, run:
 ash self:update ash
 ```
 
+#### self:modules
+
+Displays a list of all of the global modules that are currently installed.
+
 ## License
 
 [MIT](LICENSE.md)
