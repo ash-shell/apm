@@ -54,9 +54,6 @@ Self__callable_install() {
         mkdir "$Self_local_modules_directory_path"
     fi
 
-    # Importing install helper
-    . "$Ash__active_module_directory/lib/install.sh"
-
     # If user is passing in URL
     if [[ -n "$1" ]]; then
         Self_install_url "$@"
