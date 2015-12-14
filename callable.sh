@@ -55,7 +55,7 @@ Self__callable_install() {
     fi
 
     # Importing install helper
-    . "$Ash__active_module_directory/helper/install.sh"
+    . "$Ash__active_module_directory/lib/install.sh"
 
     # If user is passing in URL
     if [[ -n "$1" ]]; then
