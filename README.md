@@ -1,6 +1,6 @@
-# ash-self
+# Self
 
-Ash-Self is an [Ash](https://github.com/BrandonRomano/ash) module to mange Ash itself.
+Self is an [Ash](https://github.com/ash-shell/ash) module to mange Ash itself.
 
 ### Getting started
 
@@ -23,8 +23,8 @@ In this file you can add git clone URLs, one per line, to install modules locall
 Example `Ashmodules` file:
 
 ```
-git@github.com:BrandonRomano/ash-make.git
-git@github.com:BrandonRomano/ash-logger.git
+https://github.com/ash-shell/make.git
+https://github.com/ash-shell/logger.git
 ```
 
 #### self:install
