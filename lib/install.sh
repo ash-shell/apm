@@ -78,19 +78,41 @@ Self_install_validate() {
         return
     fi
 
-    # Importing slugify
-    Ash__import "slugify"
-
-    # Renaming git module to proper place
+    # Loading config
     eval $(YamlParse__parse "$repo_config" "Self_install_validate_")
-    local folder_name="$(Slugify__slugify "$Self_install_validate_callable_prefix")"
-    local new_path="$Self_install_path/$folder_name"
-    if [[ -d $new_path ]]; then
-        Logger__error "Module '$Self_install_validate_name' is already installed"
+    local module_package="$Self_install_validate_package"
+    local module_directory="$Self_install_path/${module_package%/*}"
+    local new_path="$Self_install_path/$module_package"
+
+    # Determining if alias already installed
+    local alias_file="$Self_install_path/$Ash_module_aliases_file"
+    local module_alias_name="$Self_install_validate_default_alias"
+    local has_key=$(YamlParse__has_key "$alias_file" "$module_alias_name")
+
+    # If package path already exists
+    if [[ -d "$new_path" ]]; then
+        Logger__error "Module '$module_package' is already installed"
         rm -rf "$repo_path"
-    else
-        mv "$repo_path" "$new_path"
+        return
     fi
+
+    # If there is already a package with that alias
+    if [[ "$has_key" == $Ash__true ]]; then
+        Logger__error "There is already a module with alias '$module_alias_name'"
+        Logger__prompt "Would you like to supply a new alias? (y/n): "; read resp
+        if [[ "$resp" == "y" ]]; then
+            Logger__prompt "Enter alias: "; read newAlias
+            module_alias_name="$newAlias"
+        else
+            Logger__log "Install cancelled"
+            return
+        fi
+    fi
+
+    # OK
+    mkdir -p $module_directory
+    mv "$repo_path" "$new_path"
+    echo "$module_alias_name: $module_package" >> "$alias_file"
 }
 
 ##################################################
