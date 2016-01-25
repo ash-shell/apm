@@ -70,9 +70,11 @@ Self__callable_install() {
 # global modules that are currently installed.
 ##################################################
 Self__callable_modules() {
-    for directory in $Ash__source_directory/$Ash_global_modules_directory/*; do
-        echo $(basename "$directory")
-    done
+    local line=""
+    local global_aliases="$Ash__source_directory/$Ash_global_modules_directory/$Ash_module_aliases_file"
+    while read line; do
+        echo "${line//:/ =>}"
+    done < "$global_aliases"
 }
 
 ##################################################
