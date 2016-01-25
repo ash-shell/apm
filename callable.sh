@@ -52,6 +52,7 @@ Self__callable_install() {
     # Creating modules directory
     if [[ "$2" != "--global" && ! -d "$Self_local_modules_directory_path" ]]; then
         mkdir "$Self_local_modules_directory_path"
+        touch "$Self_local_modules_directory_path/$Ash_module_aliases_file"
     fi
 
     # If user is passing in URL

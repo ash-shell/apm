@@ -81,7 +81,7 @@ Self_install_validate() {
     # Loading config
     eval $(YamlParse__parse "$repo_config" "Self_install_validate_")
     local module_package="$Self_install_validate_package"
-    local module_directory="${module_package%/*}"
+    local module_directory="$Self_install_path/${module_package%/*}"
     local new_path="$Self_install_path/$module_package"
 
     # Determining if alias already installed
