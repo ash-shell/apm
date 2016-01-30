@@ -86,14 +86,16 @@ Apm__callable_modules() {
 #   itself, simply just pass `ash` here.
 ##################################################
 Apm__callable_update(){
+    local module_name="$1"
+
     # Checking if we're passing a module name
-    if [[ -z $1 ]]; then
+    if [[ -z "$module_name" ]]; then
         Logger__error "Requires a valid module name (or \"ash\") to be passed in"
         return
     fi
 
     # Checking if we're updating ash
-    if [[ $1 = 'ash' ]]; then
+    if [[ "$module_name" = 'ash' ]]; then
         cd $Ash__source_directory
 
         # Updating
@@ -111,10 +113,20 @@ Apm__callable_update(){
         return
     fi
 
+    # Expanding alias
+    local alias_file="$Ash__source_directory/$Ash_global_modules_directory/$Ash_module_aliases_file"
+    local has_key=$(YamlParse__has_key "$alias_file" "$module_name")
+    if [[ "$has_key" == $Ash__true ]]; then
+        eval $(YamlParse__parse "$alias_file" "Apm_update_")
+        local variable="Apm_update_$module_name"
+        module_name=${!variable}
+    fi
+
     # Checking if we're passing a valid global module
-    local directory="$Ash__source_directory/$Ash_global_modules_directory/$1"
-    if [[ -d "$directory" ]]; then
-        Logger__log "Updating $1"
+    local directory="$Ash__source_directory/$Ash_global_modules_directory/$module_name"
+    local directory_config="$directory/$Ash_config_filename"
+    if [[ -f "$directory_config" ]]; then
+        Logger__log "Updating $module_name"
 
         # Updating
         cd "$directory"
@@ -122,12 +134,12 @@ Apm__callable_update(){
 
         # Checking for success
         if [ $? -eq 0 ]; then
-            Logger__success "$1 was updated"
+            Logger__success "$module_name was updated"
         else
-            Logger__error "Something went wrong, $1 was not updated"
+            Logger__error "Something went wrong, $module_name was not updated"
             Logger__error "You will have to manually update at $directory"
         fi
     else
-        Logger__error "Module \"$1\" does not exist"
+        Logger__error "Module \"$module_name\" does not exist"
     fi
 }
