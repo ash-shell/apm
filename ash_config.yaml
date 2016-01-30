@@ -1,4 +1,5 @@
-name: Ash
-callable_prefix: Self
-package: github.com/ash-shell/self
-default_alias: self
+name: apm
+package: github.com/ash-shell/apm
+default_alias: apm
+is_callable: true
+callable_prefix: Apm

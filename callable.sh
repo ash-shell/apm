@@ -1,23 +1,23 @@
 #!/bin/bash
 
-Self_modules_file_name="Ashmodules"
-Self_modules_clone_directory=".ash_modules_tmp"
-Self_modules_file_path="$Ash__call_directory/$Self_modules_file_name"
-Self_local_modules_directory_path="$Ash__call_directory/$Ash__modules_foldername"
-Self_local_modules_clone_path="$Ash__call_directory/$Self_modules_clone_directory"
+Apm_modules_file_name="Ashmodules"
+Apm_modules_clone_directory=".ash_modules_tmp"
+Apm_modules_file_path="$Ash__call_directory/$Apm_modules_file_name"
+Apm_local_modules_directory_path="$Ash__call_directory/$Ash__modules_foldername"
+Apm_local_modules_clone_path="$Ash__call_directory/$Apm_modules_clone_directory"
 
 ##################################################
 # This function is an alias for `ash self:help`.
 ##################################################
-Self__callable_main() {
-    Self__callable_help
+Apm__callable_main() {
+    Apm__callable_help
 }
 
 ##################################################
 # Displays relavant information on how to use
 # this module
 ##################################################
-Self__callable_help() {
+Apm__callable_help() {
     more "$Ash__active_module_directory/HELP.txt"
 }
 
@@ -25,10 +25,10 @@ Self__callable_help() {
 # This function will initialize the current
 # directory so it can start installing modules
 ##################################################
-Self__callable_init() {
+Apm__callable_init() {
     # Hasn't been created
-    if [[ ! -f "$Self_modules_file_path" ]]; then
-        touch "$Self_modules_file_path"
+    if [[ ! -f "$Apm_modules_file_path" ]]; then
+        touch "$Apm_modules_file_path"
         Logger__success "Directory successfully initialized"
 
     # Has already been created
@@ -48,20 +48,20 @@ Self__callable_init() {
 # @param $1: The git HTTP or SSH URL to install
 # @param $2: `--global` to install globally
 ##################################################
-Self__callable_install() {
+Apm__callable_install() {
     # Creating modules directory
-    if [[ "$2" != "--global" && ! -d "$Self_local_modules_directory_path" ]]; then
-        mkdir "$Self_local_modules_directory_path"
-        touch "$Self_local_modules_directory_path/$Ash_module_aliases_file"
+    if [[ "$2" != "--global" && ! -d "$Apm_local_modules_directory_path" ]]; then
+        mkdir "$Apm_local_modules_directory_path"
+        touch "$Apm_local_modules_directory_path/$Ash_module_aliases_file"
     fi
 
     # If user is passing in URL
     if [[ -n "$1" ]]; then
-        Self_install_url "$@"
+        Apm_install_url "$@"
 
     # User is not passing URL
     else
-        Self_install_modules_file
+        Apm_install_modules_file
     fi
 }
 
@@ -69,7 +69,7 @@ Self__callable_install() {
 # This function will display a list of all of the
 # global modules that are currently installed.
 ##################################################
-Self__callable_modules() {
+Apm__callable_modules() {
     local line=""
     local global_aliases="$Ash__source_directory/$Ash_global_modules_directory/$Ash_module_aliases_file"
     while read line; do
@@ -85,15 +85,17 @@ Self__callable_modules() {
 #   in it's ash_config.yaml file.  To update Ash
 #   itself, simply just pass `ash` here.
 ##################################################
-Self__callable_update(){
+Apm__callable_update(){
+    local module_name="$1"
+
     # Checking if we're passing a module name
-    if [[ -z $1 ]]; then
+    if [[ -z "$module_name" ]]; then
         Logger__error "Requires a valid module name (or \"ash\") to be passed in"
         return
     fi
 
     # Checking if we're updating ash
-    if [[ $1 = 'ash' ]]; then
+    if [[ "$module_name" = 'ash' ]]; then
         cd $Ash__source_directory
 
         # Updating
@@ -111,10 +113,20 @@ Self__callable_update(){
         return
     fi
 
+    # Expanding alias
+    local alias_file="$Ash__source_directory/$Ash_global_modules_directory/$Ash_module_aliases_file"
+    local has_key=$(YamlParse__has_key "$alias_file" "$module_name")
+    if [[ "$has_key" == $Ash__true ]]; then
+        eval $(YamlParse__parse "$alias_file" "Apm_update_")
+        local variable="Apm_update_$module_name"
+        module_name=${!variable}
+    fi
+
     # Checking if we're passing a valid global module
-    local directory="$Ash__source_directory/$Ash_global_modules_directory/$1"
-    if [[ -d "$directory" ]]; then
-        Logger__log "Updating $1"
+    local directory="$Ash__source_directory/$Ash_global_modules_directory/$module_name"
+    local directory_config="$directory/$Ash_config_filename"
+    if [[ -f "$directory_config" ]]; then
+        Logger__log "Updating $module_name"
 
         # Updating
         cd "$directory"
@@ -122,12 +134,12 @@ Self__callable_update(){
 
         # Checking for success
         if [ $? -eq 0 ]; then
-            Logger__success "$1 was updated"
+            Logger__success "$module_name was updated"
         else
-            Logger__error "Something went wrong, $1 was not updated"
+            Logger__error "Something went wrong, $module_name was not updated"
             Logger__error "You will have to manually update at $directory"
         fi
     else
-        Logger__error "Module \"$1\" does not exist"
+        Logger__error "Module \"$module_name\" does not exist"
     fi
 }
