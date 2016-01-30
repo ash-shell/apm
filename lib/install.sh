@@ -101,19 +101,16 @@ Apm_install_validate() {
     # Getting alias
     local alias_file="$Apm_install_path/$Ash_module_aliases_file"
     local module_alias_name="$Apm_install_validate_default_alias"
-    local is_callable="$Apm_install_validate_is_callable"
-    if [[ "$is_callable" == $Ash__true ]]; then
-        local has_key=$(YamlParse__has_key "$alias_file" "$module_alias_name")
-        if [[ "$has_key" == $Ash__true ]]; then
-            Logger__error "There is already a module with alias '$module_alias_name'"
-            Logger__prompt "Would you like to supply a new alias? (y/n): "; read resp
-            if [[ "$resp" == "y" ]]; then
-                Logger__prompt "Enter alias: "; read newAlias
-                module_alias_name="$newAlias"
-            else
-                Logger__log "Install cancelled"
-                return
-            fi
+    local has_key=$(YamlParse__has_key "$alias_file" "$module_alias_name")
+    if [[ "$has_key" == $Ash__true ]]; then
+        Logger__error "There is already a module with alias '$module_alias_name'"
+        Logger__prompt "Would you like to supply a new alias? (y/n): "; read resp
+        if [[ "$resp" == "y" ]]; then
+            Logger__prompt "Enter alias: "; read newAlias
+            module_alias_name="$newAlias"
+        else
+            Logger__log "Install cancelled"
+            return
         fi
     fi
 
