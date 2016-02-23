@@ -3,7 +3,7 @@ Usage:
     apm:init
         Initializes the current directory with an ash_modules file.
 
-    apm:install [$git_url] [--global]
+    apm:install [$git_url [--global]]
         Installs the modules defined in the ash_modules file.
 
         If `$git_url` is passed, only that ash module will be
