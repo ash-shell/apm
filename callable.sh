@@ -1,10 +1,10 @@
 #!/bin/bash
 
-Apm_modules_file_name="Ashmodules"
-Apm_modules_clone_directory=".ash_modules_tmp"
-Apm_modules_file_path="$Ash__call_directory/$Apm_modules_file_name"
-Apm_local_modules_directory_path="$Ash__call_directory/$Ash__modules_foldername"
-Apm_local_modules_clone_path="$Ash__call_directory/$Apm_modules_clone_directory"
+Apm_MODULES_FILE_NAME="Ashmodules"
+Apm_MODULES_CLONE_DIRECTORY=".ash_modules_tmp"
+Apm_MODULES_FILE_PATH="$Ash__call_directory/$Apm_MODULES_FILE_NAME"
+Apm_LOCAL_MODULES_DIRECTORY_PATH="$Ash__call_directory/$Ash__modules_foldername"
+Apm_LOCAL_MODULES_CLONE_PATH="$Ash__call_directory/$Apm_MODULES_CLONE_DIRECTORY"
 
 ##################################################
 # This function is an alias for `ash self:help`.
@@ -27,8 +27,8 @@ Apm__callable_help() {
 ##################################################
 Apm__callable_init() {
     # Hasn't been created
-    if [[ ! -f "$Apm_modules_file_path" ]]; then
-        touch "$Apm_modules_file_path"
+    if [[ ! -f "$Apm_MODULES_FILE_PATH" ]]; then
+        touch "$Apm_MODULES_FILE_PATH"
         Logger__success "Directory successfully initialized"
 
     # Has already been created
@@ -50,9 +50,9 @@ Apm__callable_init() {
 ##################################################
 Apm__callable_install() {
     # Creating modules directory
-    if [[ "$2" != "--global" && ! -d "$Apm_local_modules_directory_path" ]]; then
-        mkdir "$Apm_local_modules_directory_path"
-        touch "$Apm_local_modules_directory_path/$Ash_module_aliases_file"
+    if [[ "$2" != "--global" && ! -d "$Apm_LOCAL_MODULES_DIRECTORY_PATH" ]]; then
+        mkdir "$Apm_LOCAL_MODULES_DIRECTORY_PATH"
+        touch "$Apm_LOCAL_MODULES_DIRECTORY_PATH/$Ash_module_aliases_file"
     fi
 
     # If user is passing in URL
@@ -81,9 +81,9 @@ Apm__callable_modules() {
 # This function will update a global module or
 # Ash itself.
 #
-# @param $1: The global module's `name` as defined
-#   in it's ash_config.yaml file.  To update Ash
-#   itself, simply just pass `ash` here.
+# @param $1: The alias or package of a global
+# module. To update Ash itself, simply just pass
+# `ash` here.
 ##################################################
 Apm__callable_update(){
     local module_name="$1"
@@ -94,52 +94,11 @@ Apm__callable_update(){
         return
     fi
 
-    # Checking if we're updating ash
+    # Update
     if [[ "$module_name" = 'ash' ]]; then
-        cd $Ash__source_directory
-
-        # Updating
-        git pull origin master
-        git submodule update
-
-        # Checking for success
-        if [ $? -eq 0 ]; then
-            Logger__success "Ash was updated"
-        else
-            Logger__error "Something went wrong, Ash was not updated"
-            Logger__error "You will have to manually update at $Ash__source_directory"
-        fi
-
+        Apm_update_ash
         return
-    fi
-
-    # Expanding alias
-    local alias_file="$Ash__source_directory/$Ash_global_modules_directory/$Ash_module_aliases_file"
-    local has_key=$(YamlParse__has_key "$alias_file" "$module_name")
-    if [[ "$has_key" == $Ash__true ]]; then
-        eval $(YamlParse__parse "$alias_file" "Apm_update_")
-        local variable="Apm_update_$module_name"
-        module_name=${!variable}
-    fi
-
-    # Checking if we're passing a valid global module
-    local directory="$Ash__source_directory/$Ash_global_modules_directory/$module_name"
-    local directory_config="$directory/$Ash_config_filename"
-    if [[ -f "$directory_config" ]]; then
-        Logger__log "Updating $module_name"
-
-        # Updating
-        cd "$directory"
-        git pull origin master
-
-        # Checking for success
-        if [ $? -eq 0 ]; then
-            Logger__success "$module_name was updated"
-        else
-            Logger__error "Something went wrong, $module_name was not updated"
-            Logger__error "You will have to manually update at $directory"
-        fi
     else
-        Logger__error "Module \"$module_name\" does not exist"
+        Apm_update_module "$module_name"
     fi
 }

@@ -11,7 +11,7 @@ Apm_install_modules_file() {
         if [[ "$line" != "" ]]; then
             Apm_install_url "$line"
         fi
-    done < "$Apm_modules_file_path"
+    done < "$Apm_MODULES_FILE_PATH"
 }
 
 ##################################################
@@ -24,12 +24,12 @@ Apm_install_url() {
     # If global flag is passed
     if [[ -n "$2" && "$2" == "--global" ]]; then
         Apm_install_path="$Ash__source_directory/$Ash_global_modules_directory"
-        Apm_clone_path="$Ash__source_directory/$Apm_modules_clone_directory"
+        Apm_clone_path="$Ash__source_directory/$Apm_MODULES_CLONE_DIRECTORY"
 
     # If no global flag is passed
     else
-        Apm_install_path="$Apm_local_modules_directory_path"
-        Apm_clone_path="$Apm_local_modules_clone_path"
+        Apm_install_path="$Apm_LOCAL_MODULES_DIRECTORY_PATH"
+        Apm_clone_path="$Apm_LOCAL_MODULES_CLONE_PATH"
     fi
 
     # Creating temporary clone path
