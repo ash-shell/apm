@@ -23,8 +23,8 @@ Apm_install_modules_file() {
 Apm_install_url() {
     # If global flag is passed
     if [[ -n "$2" && "$2" == "--global" ]]; then
-        Apm_install_path="$Ash__source_directory/$Ash_global_modules_directory"
-        Apm_clone_path="$Ash__source_directory/$Apm_MODULES_CLONE_DIRECTORY"
+        Apm_install_path="$Ash__SOURCE_DIRECTORY/$Ash__GLOBAL_MODULES_DIRECTORY"
+        Apm_clone_path="$Ash__SOURCE_DIRECTORY/$Apm_MODULES_CLONE_DIRECTORY"
 
     # If no global flag is passed
     else
@@ -63,7 +63,7 @@ Apm_install_url() {
 Apm_install_validate() {
     local repo_folder=$(Apm_install_get_folder "$1")
     local repo_path="$Apm_clone_path/$repo_folder"
-    local repo_config="$repo_path/$Ash_config_filename"
+    local repo_config="$repo_path/$Ash__CONFIG_FILENAME"
 
     # Invalid path
     if [[ ! -d "$repo_path" ]]; then
@@ -86,7 +86,7 @@ Apm_install_validate() {
 
     # If package wasn't supplied in the ash_config.yaml file
     if [[ "$module_package" == "" ]]; then
-        Logger__error "Failed to install module as it failed to provide a 'package' in it's $Ash_config_filename"
+        Logger__error "Failed to install module as it failed to provide a 'package' in it's $Ash__CONFIG_FILENAME"
         rm -rf "$repo_path"
         return
     fi
@@ -99,10 +99,10 @@ Apm_install_validate() {
     fi
 
     # Getting alias
-    local alias_file="$Apm_install_path/$Ash_module_aliases_file"
+    local alias_file="$Apm_install_path/$Ash__MODULE_ALIASES_FILE"
     local module_alias_name="$Apm_install_validate_default_alias"
     local has_key=$(YamlParse__has_key "$alias_file" "$module_alias_name")
-    if [[ "$has_key" == $Ash__true ]]; then
+    if [[ "$has_key" == $Ash__TRUE ]]; then
         Logger__error "There is already a module with alias '$module_alias_name'"
         Logger__prompt "Would you like to supply a new alias? (y/n): "; read resp
         if [[ "$resp" == "y" ]]; then

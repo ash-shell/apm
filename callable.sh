@@ -2,9 +2,9 @@
 
 Apm_MODULES_FILE_NAME="Ashmodules"
 Apm_MODULES_CLONE_DIRECTORY=".ash_modules_tmp"
-Apm_MODULES_FILE_PATH="$Ash__call_directory/$Apm_MODULES_FILE_NAME"
-Apm_LOCAL_MODULES_DIRECTORY_PATH="$Ash__call_directory/$Ash__modules_foldername"
-Apm_LOCAL_MODULES_CLONE_PATH="$Ash__call_directory/$Apm_MODULES_CLONE_DIRECTORY"
+Apm_MODULES_FILE_PATH="$Ash__CALL_DIRECTORY/$Apm_MODULES_FILE_NAME"
+Apm_LOCAL_MODULES_DIRECTORY_PATH="$Ash__CALL_DIRECTORY/$Ash__modules_foldername"
+Apm_LOCAL_MODULES_CLONE_PATH="$Ash__CALL_DIRECTORY/$Apm_MODULES_CLONE_DIRECTORY"
 
 ##################################################
 # This function is an alias for `ash self:help`.
@@ -18,7 +18,7 @@ Apm__callable_main() {
 # this module
 ##################################################
 Apm__callable_help() {
-    more "$Ash__active_module_directory/HELP.txt"
+    more "$Ash__ACTIVE_MODULE_DIRECTORY/HELP.txt"
 }
 
 ##################################################
@@ -52,7 +52,7 @@ Apm__callable_install() {
     # Creating modules directory
     if [[ "$2" != "--global" && ! -d "$Apm_LOCAL_MODULES_DIRECTORY_PATH" ]]; then
         mkdir "$Apm_LOCAL_MODULES_DIRECTORY_PATH"
-        touch "$Apm_LOCAL_MODULES_DIRECTORY_PATH/$Ash_module_aliases_file"
+        touch "$Apm_LOCAL_MODULES_DIRECTORY_PATH/$Ash__MODULE_ALIASES_FILE"
     fi
 
     # If user is passing in URL
@@ -71,7 +71,7 @@ Apm__callable_install() {
 ##################################################
 Apm__callable_modules() {
     local line=""
-    local global_aliases="$Ash__source_directory/$Ash_global_modules_directory/$Ash_module_aliases_file"
+    local global_aliases="$Ash__SOURCE_DIRECTORY/$Ash__GLOBAL_MODULES_DIRECTORY/$Ash__MODULE_ALIASES_FILE"
     while read line; do
         echo "${line//:/ =>}"
     done < "$global_aliases"
