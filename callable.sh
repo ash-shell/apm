@@ -72,6 +72,12 @@ Apm__callable_install() {
 Apm__callable_modules() {
     local line=""
     local global_aliases="$Ash__SOURCE_DIRECTORY/$Ash__GLOBAL_MODULES_DIRECTORY/$Ash__MODULE_ALIASES_FILE"
+
+    # Create global aliases if it doesn't exist
+    if [[ ! -f "$global_aliases" ]]; then
+        touch "$global_aliases"
+    fi
+
     while read line; do
         echo "${line//:/ =>}"
     done < "$global_aliases"

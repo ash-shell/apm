@@ -30,6 +30,9 @@ Apm_update_module() {
 
     # Expanding alias
     local alias_file="$Ash__SOURCE_DIRECTORY/$Ash__GLOBAL_MODULES_DIRECTORY/$Ash__MODULE_ALIASES_FILE"
+    if [[ ! -f "$alias_file" ]]; then
+        touch "$alias_file"
+    fi
     local has_key=$(YamlParse__has_key "$alias_file" "$module_name")
     if [[ "$has_key" == $Ash__TRUE ]]; then
         eval $(YamlParse__parse "$alias_file" "Apm_update_")
