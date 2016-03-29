@@ -100,6 +100,9 @@ Apm_install_validate() {
 
     # Getting alias
     local alias_file="$Apm_install_path/$Ash__MODULE_ALIASES_FILE"
+    if [[ ! -f $alias_file ]]; then
+        touch $alias_file
+    fi
     local module_alias_name="$Apm_install_validate_default_alias"
     local has_key=$(YamlParse__has_key "$alias_file" "$module_alias_name")
     if [[ "$has_key" == $Ash__TRUE ]]; then
